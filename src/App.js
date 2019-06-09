@@ -26,14 +26,14 @@ class App extends Component {
 
   render() {
     const { observation } = this.props
-    return (
-      <Tiles>
-        {observation.flat().map((value, index) => (
-          <Tile key={index} value={value}>
-            {value !== 0 ? value : null}
-          </Tile>
-        ))}
-      </Tiles>
+    return React.createElement(
+      Tiles,
+      null,
+      observation
+        .flat()
+        .map((value, key) =>
+          React.createElement(Tile, { key, value }, value !== 0 ? value : null)
+        )
     )
   }
 }
