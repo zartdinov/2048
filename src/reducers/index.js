@@ -1,4 +1,10 @@
-import { RESET, SHIFT_UP, SHIFT_DOWN, SHIFT_LEFT, SHIFT_RIGHT } from "../actions"
+import {
+  RESET,
+  SHIFT_UP,
+  SHIFT_DOWN,
+  SHIFT_LEFT,
+  SHIFT_RIGHT
+} from "../actions"
 
 const initialState = {
   score: 0,
@@ -70,6 +76,30 @@ const rotate = matrix => {
   return matrix
 }
 
+const check = observation => {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (
+        observation[i][j] === 0 ||
+        observation[i][j + 1] === 0 ||
+        observation[i + 1][j] === 0 ||
+        observation[i + 1][j + 1] === 0 ||
+        observation[i][j] === observation[i][j + 1] ||
+        observation[i][j] === observation[i + 1][j] ||
+        observation[i][j + 1] === observation[i + 1][j + 1] ||
+        observation[i + 1][j] === observation[i + 1][j + 1] ||
+        observation[i][j] === 2048 ||
+        observation[i][j + 1] === 2048 ||
+        observation[i + 1][j] === 2048 ||
+        observation[i + 1][j + 1] === 2048
+      ) {
+        return false
+      }
+    }
+  }
+  return true
+}
+
 const reducers = (state = initialState, action) => {
   switch (action.type) {
     case RESET: {
@@ -87,7 +117,8 @@ const reducers = (state = initialState, action) => {
       observation = rotate(observation)
       return {
         observation,
-        reward: Math.floor(Math.random() * 4)
+        reward: Math.floor(Math.random() * 4),
+        done: check(observation)
       }
     }
     case SHIFT_DOWN: {
@@ -100,7 +131,8 @@ const reducers = (state = initialState, action) => {
       observation = rotate(observation)
       return {
         observation,
-        reward: Math.floor(Math.random() * 4)
+        reward: Math.floor(Math.random() * 4),
+        done: check(observation)
       }
     }
     case SHIFT_LEFT: {
@@ -109,7 +141,8 @@ const reducers = (state = initialState, action) => {
       observation = spawn(observation)
       return {
         observation,
-        reward: Math.floor(Math.random() * 4)
+        reward: Math.floor(Math.random() * 4),
+        done: check(observation)
       }
     }
     case SHIFT_RIGHT: {
@@ -122,7 +155,8 @@ const reducers = (state = initialState, action) => {
       observation = rotate(observation)
       return {
         observation,
-        reward: Math.floor(Math.random() * 4)
+        reward: Math.floor(Math.random() * 4),
+        done: check(observation)
       }
     }
     default:

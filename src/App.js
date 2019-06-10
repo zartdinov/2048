@@ -25,7 +25,10 @@ class App extends Component {
   }
 
   render() {
-    const { observation } = this.props
+    const { observation, done } = this.props
+    if (done) {
+      alert("Done!")
+    }
     return React.createElement(
       Tiles,
       null,
@@ -53,9 +56,10 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-const mapStateToProps = ({ score, observation }) => ({
+const mapStateToProps = ({ score, observation, done }) => ({
   score,
-  observation
+  observation,
+  done
 })
 
 export default connect(
